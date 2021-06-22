@@ -23,6 +23,9 @@ public class BallMove : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             ChangeScale(0.2f);
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+            ChangeScale(-0.2f);
     }
 
 
@@ -74,7 +77,7 @@ public class BallMove : MonoBehaviour
     IEnumerator ChangeScaleAsync(float scale)
     {
         int count = 20;
-        float ballScale = transform.localScale.x;
+        float ballScale = transform.localScale.x;//Will be fixed.
         for (float i = 0; i < count; i++)
         {
             ballScale += scale / count;
