@@ -4,7 +4,14 @@ using UnityEngine;
 public class BallScale : MonoBehaviour
 {
     [SerializeField]
-    float ballBelowLimit = 1, ballUpLimit = 2, ballScaleChangeTime = 0.2f;
+    float belowLimit = 1, upLimit = 2, scaleChangeTime = 0.2f;
+
+    float ballScale;
+
+    private void Start()
+    {
+        ballScale = transform.localScale.x;
+    }
 
     private void Update()
     {
@@ -23,25 +30,23 @@ public class BallScale : MonoBehaviour
     IEnumerator ChangeScaleAsync(float scale)
     {
         int count = 20;
-        float ballScale = transform.localScale.x;//Will be fixed.
         for (float i = 0; i < count; i++)
         {
             ballScale += scale / count;
 
-            if (ballScale < ballBelowLimit)
+            if (ballScale < belowLimit)
                 DestroyBall();
-            else if (ballScale > ballUpLimit)
-                ballScale = ballUpLimit;
+            else if (ballScale > upLimit)
+                ballScale = upLimit;
 
             transform.localScale = Vector3.one * ballScale;
 
-            yield return new WaitForSeconds(ballScaleChangeTime / count);
+            yield return new WaitForSeconds(scaleChangeTime / count);
         }
     }
 
     void DestroyBall()
     {
-        GetComponentInChildren<MeshRenderer>().enabled = false;
-        GetComponent<Collider>().enabled = false;
+        Destroy(this.gameObject);
     }
 }

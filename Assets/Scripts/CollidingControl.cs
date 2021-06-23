@@ -13,22 +13,24 @@ public class CollidingControl : MonoBehaviour
     {
         if (collision.gameObject.CompareTag(enemyTag))
         {
-            Push(collision.gameObject.transform);
+            collision.gameObject.GetComponent<CollidingControl>().Push(transform);
         }
     }
 
-    private void Push(Transform enemy)
+    internal void Push(Transform enemy)
     {
-        StartCoroutine(ReverseForce(enemy));
+        StartCoroutine(PushAsync(enemy));
     }
 
-    IEnumerator ReverseForce(Transform enemy)
+    IEnumerator PushAsync(Transform enemy)
     {
-        Vector3 distanceVector = (enemy.position - transform.position).normalized;
-        Rigidbody rbEnemy = enemy.gameObject.GetComponent<Rigidbody>();
-        rbEnemy.velocity = Vector3.zero;
-        rbEnemy.AddForce(force * distanceVector * transform.lossyScale.x / enemy.lossyScale.x, ForceMode.Impulse);
+        Vector3 distanceVector = (transform.position - enemy.position).normalized;
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.velocity = Vector3.zero;
+        rb.AddForce(force * distanceVector * enemy.lossyScale.x / transform.lossyScale.x, ForceMode.Impulse);
         yield return new WaitForSeconds(forceTime);
-        rbEnemy.AddForce(-force * distanceVector * transform.lossyScale.x / enemy.lossyScale.x, ForceMode.Impulse);
+        rb.AddForce(-force * distanceVector * enemy.lossyScale.x / transform.lossyScale.x, ForceMode.Impulse);
+        yield return new WaitForSeconds(forceTime);
+        rb.velocity = Vector3.zero;
     }
 }
