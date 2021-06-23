@@ -29,8 +29,6 @@ public class CollidingControl : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.AddForce(force * distanceVector * enemy.lossyScale.x / transform.lossyScale.x, ForceMode.Impulse);
         yield return new WaitForSeconds(forceTime);
-        rb.AddForce(-force * distanceVector * enemy.lossyScale.x / transform.lossyScale.x, ForceMode.Impulse);
-        yield return new WaitForSeconds(forceTime);
         rb.velocity = Vector3.zero;
     }
 }
